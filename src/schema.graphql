@@ -1,9 +1,9 @@
 type Query {
-    info: String!
+    users: [User!]!
+    user(id: ID!): User!
 }
 
-
-type Author{
+type Author {
     id: ID!
     firstname: String!
     lastname: String!
@@ -18,13 +18,19 @@ type Book{
     cover: String
     nbcopy: Int!
     comments:[Comment!]!
+    borrowBy:User
+    borrowdate: Date
 }
+
+scalar Date
+
 
 type User {
     id: ID!
     name: String!
     email: String!
     comments:[Comment!]!
+    borrowBooks:[Book!]!
 }
 
 type Comment{

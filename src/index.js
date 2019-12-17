@@ -2,6 +2,8 @@ const { GraphQLServer } = require('graphql-yoga');
 const Query = require("./resolvers/Query");
 // const { prisma } = require('./generated/prisma-clientnpm');
 
+
+
 const resolvers = {
     Query
 };
