@@ -1,0 +1,38 @@
+type Query {
+    info: String!
+}
+
+
+type Author{
+    id: ID!
+    firstname: String!
+    lastname: String!
+}
+
+type Book{
+    id: ID!
+    title: String!
+    subtitle: String
+    authors: [Author!]!
+    format: String!
+    cover: String
+    nbcopy: Int!
+    comments:[Comment!]!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    comments:[Comment!]!
+}
+
+type Comment{
+    id: ID!
+    title: String
+    comment: String!
+    bookeval: Int
+    book: Book!
+    user: User!
+    isusefull: Boolean
+}
