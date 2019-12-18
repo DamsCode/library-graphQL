@@ -1,25 +1,18 @@
 type Query {
     users: [User!]!
+    books: [Book!]!
     user(id: ID!): User!
-}
-
-type Author {
-    id: ID!
-    firstname: String!
-    lastname: String!
 }
 
 type Book{
     id: ID!
     title: String!
     subtitle: String
-    authors: [Author!]!
+    authors: [String!]!
     format: String!
     cover: String
-    nbcopy: Int!
     comments:[Comment!]!
-    borrowBy:User
-    borrowdate: Date
+    rent: [Rent!]!
 }
 
 scalar Date
@@ -30,7 +23,7 @@ type User {
     name: String!
     email: String!
     comments:[Comment!]!
-    borrowBooks:[Book!]!
+    rent: [Rent!]!
 }
 
 type Comment{
@@ -40,5 +33,13 @@ type Comment{
     bookeval: Int
     book: Book!
     user: User!
-    isusefull: Boolean
+    usefull: Int
+    notusefull:Int
+}
+type Rent{
+    id: ID!
+    book: Book!
+    user: User!
+    date: Date!
+    isBack: Boolean!
 }
