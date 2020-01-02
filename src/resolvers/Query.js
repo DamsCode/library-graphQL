@@ -1,22 +1,31 @@
-
-const users = (parent,args,context)=> {
-    const users = context.prisma.users();
-    return users;
-};
-const user = (parent,args,context)=> {
-     const user = context.prisma.user({id:args.id});
-     if (user)
-         return user;
-     throw new Error("no found");
-};
-
-const books= (parent,args,context)=> {
-    const books = context.prisma.books();
-    return books;
+const FeedBooks = async (parent,args,context) => {
+    const where = args.filter ? {
+        OR: [
+            { title_contains: args.filter },
+            { editor_contains: args.filter },
+            { isbn_contains: args.filter },
+            { format_contains: args.filter },
+            { language_contains: args.filter },
+        ],
+    } : {};
+    const books = await context.prisma.books({
+        where,
+        skip: args.skip,
+        first: args.first,
+        orderBy: args.orderBy
+    });
+    const count = await context.prisma
+        .booksConnection({
+            where,
+        })
+        .aggregate()
+        .count();
+    return {
+        books,
+        count,
+    }
 };
 
 module.exports = {
-    users,
-    user,
-    books
+    FeedBooks,
 };

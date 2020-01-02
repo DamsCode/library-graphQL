@@ -1,7 +1,21 @@
 type Query {
-    users: [User!]!
+    FeedBooks(filter: String, skip: Int, first: Int, orderBy: BookOrderByInput):FeedBooks!
+}
+
+type Mutation{
+    signup(email: String!, password: String!, name: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
+    borrow(idBook: ID!):Rent!
+}
+
+type AuthPayload {
+    token: String
+    user: User
+}
+
+type FeedBooks{
     books: [Book!]!
-    user(id: ID!): User!
+    count: Int!
 }
 
 type Book{
@@ -17,6 +31,15 @@ type Book{
     rent: [Rent!]
 }
 
+enum BookOrderByInput {
+    title_ASC
+    title_DESC
+    editor_ASC
+    editor_DESC
+    language_ASC
+    language_DESC
+}
+
 scalar Date
 
 
@@ -25,6 +48,7 @@ type User {
     id: ID!
     name: String!
     email: String!
+    password: String!
     comments:[Comment!]!
     rent: [Rent!]!
 }
@@ -44,6 +68,8 @@ type Rent{
     id: ID!
     book: Book!
     user: User!
-    date: Date!
+    rentAt: Date!
+    backAt: Date
     isBack: Boolean!
 }
+

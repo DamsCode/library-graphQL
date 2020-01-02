@@ -1013,6 +1013,7 @@ type User {
   id: ID!
   name: String!
   email: String!
+  password: String!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   rent(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
 }
@@ -1027,6 +1028,7 @@ input UserCreateInput {
   id: ID
   name: String!
   email: String!
+  password: String!
   comments: CommentCreateManyWithoutUserInput
   rent: RentCreateManyWithoutUserInput
 }
@@ -1045,6 +1047,7 @@ input UserCreateWithoutCommentsInput {
   id: ID
   name: String!
   email: String!
+  password: String!
   rent: RentCreateManyWithoutUserInput
 }
 
@@ -1052,6 +1055,7 @@ input UserCreateWithoutRentInput {
   id: ID
   name: String!
   email: String!
+  password: String!
   comments: CommentCreateManyWithoutUserInput
 }
 
@@ -1067,12 +1071,15 @@ enum UserOrderByInput {
   name_DESC
   email_ASC
   email_DESC
+  password_ASC
+  password_DESC
 }
 
 type UserPreviousValues {
   id: ID!
   name: String!
   email: String!
+  password: String!
 }
 
 type UserSubscriptionPayload {
@@ -1096,6 +1103,7 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   name: String
   email: String
+  password: String
   comments: CommentUpdateManyWithoutUserInput
   rent: RentUpdateManyWithoutUserInput
 }
@@ -1103,6 +1111,7 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   name: String
   email: String
+  password: String
 }
 
 input UserUpdateOneRequiredWithoutCommentsInput {
@@ -1122,12 +1131,14 @@ input UserUpdateOneRequiredWithoutRentInput {
 input UserUpdateWithoutCommentsDataInput {
   name: String
   email: String
+  password: String
   rent: RentUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutRentDataInput {
   name: String
   email: String
+  password: String
   comments: CommentUpdateManyWithoutUserInput
 }
 
@@ -1184,6 +1195,20 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput
