@@ -4,7 +4,7 @@ const Book = require("./resolvers/Book");
 const Comment = require("./resolvers/Comment");
 const User = require("./resolvers/User");
 const Rent = require("./resolvers/Rent");
-// const { prisma } = require('./generated/prisma-clientnpm');
+const { prisma } = require('./generated/prisma-client');
 
 
 
@@ -23,8 +23,9 @@ const server = new GraphQLServer({
     context: request => {
         return {
             ...request,
-            // prisma,
+            prisma,
         }
     },
 });
+
 server.start(() => console.log(`Server is running on http://localhost:4000`));

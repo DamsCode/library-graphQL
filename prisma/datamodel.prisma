@@ -1,36 +1,27 @@
-type Query {
-    users: [User!]!
-    books: [Book!]!
-    user(id: ID!): User!
-}
-
 type Book{
-    id: ID!
+    id: ID! @id
     isbn: String!
     title: String!
-    authors: [String!]!
+    authors: [String!]! @scalarList(strategy: RELATION)
     editor:String!
     format: String!
     language:String!
-    cover: String
-    comments:[Comment!]
-    rent: [Rent!]
+    cover: String!
+    comments:[Comment!]!
+    rent: [Rent!]!
 }
-
-scalar Date
-
 
 
 type User {
-    id: ID!
+    id: ID! @id
     name: String!
-    email: String!
+    email: String! @unique
     comments:[Comment!]!
     rent: [Rent!]!
 }
 
 type Comment{
-    id: ID!
+    id: ID! @id
     title: String
     comment: String!
     bookeval: Int
@@ -41,9 +32,10 @@ type Comment{
 }
 
 type Rent{
-    id: ID!
+    id: ID! @id
     book: Book!
     user: User!
-    date: Date!
-    isBack: Boolean!
+    rentAt: DateTime!
+    backAt: DateTime
+    isBack: Boolean @default(value: false)
 }
