@@ -3,7 +3,7 @@
 * Encode the Books:
     * title
     * subtitle (if existed)
-    * autor(s)
+    * author(s)
     * editor
     * format
     * language
