@@ -28,5 +28,7 @@
 * Server Graph-QL (graphql-yoga)
 * Prisma V1
 * Mysql
+* axios
+* jsonwebtoken
     
     
