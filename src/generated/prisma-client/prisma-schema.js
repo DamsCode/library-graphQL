@@ -19,6 +19,10 @@ type AggregateUser {
   count: Int!
 }
 
+type AggregateVote {
+  count: Int!
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -337,8 +341,7 @@ type Comment {
   bookeval: Int
   book: Book!
   user: User!
-  usefull: Int
-  notusefull: Int
+  vote(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
 type CommentConnection {
@@ -354,8 +357,7 @@ input CommentCreateInput {
   bookeval: Int
   book: BookCreateOneWithoutCommentsInput!
   user: UserCreateOneWithoutCommentsInput!
-  usefull: Int
-  notusefull: Int
+  vote: VoteCreateManyWithoutCommentInput
 }
 
 input CommentCreateManyWithoutBookInput {
@@ -368,14 +370,18 @@ input CommentCreateManyWithoutUserInput {
   connect: [CommentWhereUniqueInput!]
 }
 
+input CommentCreateOneWithoutVoteInput {
+  create: CommentCreateWithoutVoteInput
+  connect: CommentWhereUniqueInput
+}
+
 input CommentCreateWithoutBookInput {
   id: ID
   title: String
   comment: String!
   bookeval: Int
   user: UserCreateOneWithoutCommentsInput!
-  usefull: Int
-  notusefull: Int
+  vote: VoteCreateManyWithoutCommentInput
 }
 
 input CommentCreateWithoutUserInput {
@@ -384,8 +390,16 @@ input CommentCreateWithoutUserInput {
   comment: String!
   bookeval: Int
   book: BookCreateOneWithoutCommentsInput!
-  usefull: Int
-  notusefull: Int
+  vote: VoteCreateManyWithoutCommentInput
+}
+
+input CommentCreateWithoutVoteInput {
+  id: ID
+  title: String
+  comment: String!
+  bookeval: Int
+  book: BookCreateOneWithoutCommentsInput!
+  user: UserCreateOneWithoutCommentsInput!
 }
 
 type CommentEdge {
@@ -402,10 +416,6 @@ enum CommentOrderByInput {
   comment_DESC
   bookeval_ASC
   bookeval_DESC
-  usefull_ASC
-  usefull_DESC
-  notusefull_ASC
-  notusefull_DESC
 }
 
 type CommentPreviousValues {
@@ -413,8 +423,6 @@ type CommentPreviousValues {
   title: String
   comment: String!
   bookeval: Int
-  usefull: Int
-  notusefull: Int
 }
 
 input CommentScalarWhereInput {
@@ -468,22 +476,6 @@ input CommentScalarWhereInput {
   bookeval_lte: Int
   bookeval_gt: Int
   bookeval_gte: Int
-  usefull: Int
-  usefull_not: Int
-  usefull_in: [Int!]
-  usefull_not_in: [Int!]
-  usefull_lt: Int
-  usefull_lte: Int
-  usefull_gt: Int
-  usefull_gte: Int
-  notusefull: Int
-  notusefull_not: Int
-  notusefull_in: [Int!]
-  notusefull_not_in: [Int!]
-  notusefull_lt: Int
-  notusefull_lte: Int
-  notusefull_gt: Int
-  notusefull_gte: Int
   AND: [CommentScalarWhereInput!]
   OR: [CommentScalarWhereInput!]
   NOT: [CommentScalarWhereInput!]
@@ -513,24 +505,19 @@ input CommentUpdateInput {
   bookeval: Int
   book: BookUpdateOneRequiredWithoutCommentsInput
   user: UserUpdateOneRequiredWithoutCommentsInput
-  usefull: Int
-  notusefull: Int
+  vote: VoteUpdateManyWithoutCommentInput
 }
 
 input CommentUpdateManyDataInput {
   title: String
   comment: String
   bookeval: Int
-  usefull: Int
-  notusefull: Int
 }
 
 input CommentUpdateManyMutationInput {
   title: String
   comment: String
   bookeval: Int
-  usefull: Int
-  notusefull: Int
 }
 
 input CommentUpdateManyWithoutBookInput {
@@ -562,13 +549,19 @@ input CommentUpdateManyWithWhereNestedInput {
   data: CommentUpdateManyDataInput!
 }
 
+input CommentUpdateOneRequiredWithoutVoteInput {
+  create: CommentCreateWithoutVoteInput
+  update: CommentUpdateWithoutVoteDataInput
+  upsert: CommentUpsertWithoutVoteInput
+  connect: CommentWhereUniqueInput
+}
+
 input CommentUpdateWithoutBookDataInput {
   title: String
   comment: String
   bookeval: Int
   user: UserUpdateOneRequiredWithoutCommentsInput
-  usefull: Int
-  notusefull: Int
+  vote: VoteUpdateManyWithoutCommentInput
 }
 
 input CommentUpdateWithoutUserDataInput {
@@ -576,8 +569,15 @@ input CommentUpdateWithoutUserDataInput {
   comment: String
   bookeval: Int
   book: BookUpdateOneRequiredWithoutCommentsInput
-  usefull: Int
-  notusefull: Int
+  vote: VoteUpdateManyWithoutCommentInput
+}
+
+input CommentUpdateWithoutVoteDataInput {
+  title: String
+  comment: String
+  bookeval: Int
+  book: BookUpdateOneRequiredWithoutCommentsInput
+  user: UserUpdateOneRequiredWithoutCommentsInput
 }
 
 input CommentUpdateWithWhereUniqueWithoutBookInput {
@@ -588,6 +588,11 @@ input CommentUpdateWithWhereUniqueWithoutBookInput {
 input CommentUpdateWithWhereUniqueWithoutUserInput {
   where: CommentWhereUniqueInput!
   data: CommentUpdateWithoutUserDataInput!
+}
+
+input CommentUpsertWithoutVoteInput {
+  update: CommentUpdateWithoutVoteDataInput!
+  create: CommentCreateWithoutVoteInput!
 }
 
 input CommentUpsertWithWhereUniqueWithoutBookInput {
@@ -655,22 +660,9 @@ input CommentWhereInput {
   bookeval_gte: Int
   book: BookWhereInput
   user: UserWhereInput
-  usefull: Int
-  usefull_not: Int
-  usefull_in: [Int!]
-  usefull_not_in: [Int!]
-  usefull_lt: Int
-  usefull_lte: Int
-  usefull_gt: Int
-  usefull_gte: Int
-  notusefull: Int
-  notusefull_not: Int
-  notusefull_in: [Int!]
-  notusefull_not_in: [Int!]
-  notusefull_lt: Int
-  notusefull_lte: Int
-  notusefull_gt: Int
-  notusefull_gte: Int
+  vote_every: VoteWhereInput
+  vote_some: VoteWhereInput
+  vote_none: VoteWhereInput
   AND: [CommentWhereInput!]
   OR: [CommentWhereInput!]
   NOT: [CommentWhereInput!]
@@ -709,6 +701,12 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createVote(data: VoteCreateInput!): Vote!
+  updateVote(data: VoteUpdateInput!, where: VoteWhereUniqueInput!): Vote
+  updateManyVotes(data: VoteUpdateManyMutationInput!, where: VoteWhereInput): BatchPayload!
+  upsertVote(where: VoteWhereUniqueInput!, create: VoteCreateInput!, update: VoteUpdateInput!): Vote!
+  deleteVote(where: VoteWhereUniqueInput!): Vote
+  deleteManyVotes(where: VoteWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -741,6 +739,9 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  vote(where: VoteWhereUniqueInput!): Vote
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote]!
+  votesConnection(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VoteConnection!
   node(id: ID!): Node
 }
 
@@ -1007,6 +1008,7 @@ type Subscription {
   comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
   rent(where: RentSubscriptionWhereInput): RentSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  vote(where: VoteSubscriptionWhereInput): VoteSubscriptionPayload
 }
 
 type User {
@@ -1031,6 +1033,11 @@ input UserCreateInput {
   password: String!
   comments: CommentCreateManyWithoutUserInput
   rent: RentCreateManyWithoutUserInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutCommentsInput {
@@ -1100,6 +1107,14 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  name: String
+  email: String
+  password: String
+  comments: CommentUpdateManyWithoutUserInput
+  rent: RentUpdateManyWithoutUserInput
+}
+
 input UserUpdateInput {
   name: String
   email: String
@@ -1112,6 +1127,13 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutCommentsInput {
@@ -1140,6 +1162,11 @@ input UserUpdateWithoutRentDataInput {
   email: String
   password: String
   comments: CommentUpdateManyWithoutUserInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutCommentsInput {
@@ -1223,6 +1250,169 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+}
+
+type Vote {
+  id: ID!
+  comment: Comment!
+  user: User!
+  usefull: Boolean
+}
+
+type VoteConnection {
+  pageInfo: PageInfo!
+  edges: [VoteEdge]!
+  aggregate: AggregateVote!
+}
+
+input VoteCreateInput {
+  id: ID
+  comment: CommentCreateOneWithoutVoteInput!
+  user: UserCreateOneInput!
+  usefull: Boolean
+}
+
+input VoteCreateManyWithoutCommentInput {
+  create: [VoteCreateWithoutCommentInput!]
+  connect: [VoteWhereUniqueInput!]
+}
+
+input VoteCreateWithoutCommentInput {
+  id: ID
+  user: UserCreateOneInput!
+  usefull: Boolean
+}
+
+type VoteEdge {
+  node: Vote!
+  cursor: String!
+}
+
+enum VoteOrderByInput {
+  id_ASC
+  id_DESC
+  usefull_ASC
+  usefull_DESC
+}
+
+type VotePreviousValues {
+  id: ID!
+  usefull: Boolean
+}
+
+input VoteScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  usefull: Boolean
+  usefull_not: Boolean
+  AND: [VoteScalarWhereInput!]
+  OR: [VoteScalarWhereInput!]
+  NOT: [VoteScalarWhereInput!]
+}
+
+type VoteSubscriptionPayload {
+  mutation: MutationType!
+  node: Vote
+  updatedFields: [String!]
+  previousValues: VotePreviousValues
+}
+
+input VoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: VoteWhereInput
+  AND: [VoteSubscriptionWhereInput!]
+  OR: [VoteSubscriptionWhereInput!]
+  NOT: [VoteSubscriptionWhereInput!]
+}
+
+input VoteUpdateInput {
+  comment: CommentUpdateOneRequiredWithoutVoteInput
+  user: UserUpdateOneRequiredInput
+  usefull: Boolean
+}
+
+input VoteUpdateManyDataInput {
+  usefull: Boolean
+}
+
+input VoteUpdateManyMutationInput {
+  usefull: Boolean
+}
+
+input VoteUpdateManyWithoutCommentInput {
+  create: [VoteCreateWithoutCommentInput!]
+  delete: [VoteWhereUniqueInput!]
+  connect: [VoteWhereUniqueInput!]
+  set: [VoteWhereUniqueInput!]
+  disconnect: [VoteWhereUniqueInput!]
+  update: [VoteUpdateWithWhereUniqueWithoutCommentInput!]
+  upsert: [VoteUpsertWithWhereUniqueWithoutCommentInput!]
+  deleteMany: [VoteScalarWhereInput!]
+  updateMany: [VoteUpdateManyWithWhereNestedInput!]
+}
+
+input VoteUpdateManyWithWhereNestedInput {
+  where: VoteScalarWhereInput!
+  data: VoteUpdateManyDataInput!
+}
+
+input VoteUpdateWithoutCommentDataInput {
+  user: UserUpdateOneRequiredInput
+  usefull: Boolean
+}
+
+input VoteUpdateWithWhereUniqueWithoutCommentInput {
+  where: VoteWhereUniqueInput!
+  data: VoteUpdateWithoutCommentDataInput!
+}
+
+input VoteUpsertWithWhereUniqueWithoutCommentInput {
+  where: VoteWhereUniqueInput!
+  update: VoteUpdateWithoutCommentDataInput!
+  create: VoteCreateWithoutCommentInput!
+}
+
+input VoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  comment: CommentWhereInput
+  user: UserWhereInput
+  usefull: Boolean
+  usefull_not: Boolean
+  AND: [VoteWhereInput!]
+  OR: [VoteWhereInput!]
+  NOT: [VoteWhereInput!]
+}
+
+input VoteWhereUniqueInput {
+  id: ID
 }
 `
       }

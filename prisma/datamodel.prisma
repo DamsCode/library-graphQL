@@ -28,8 +28,7 @@ type Comment{
     bookeval: Int
     book: Book!
     user: User!
-    usefull: Int
-    notusefull:Int
+    vote: [Vote!]!
 }
 
 type Rent{
@@ -39,4 +38,11 @@ type Rent{
     rentAt: DateTime!
     backAt: DateTime
     isBack: Boolean @default(value: false)
+}
+
+type Vote{
+    id: ID! @id
+    comment: Comment!
+    user: User!
+    usefull: Boolean
 }

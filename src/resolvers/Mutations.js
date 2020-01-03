@@ -60,13 +60,7 @@ const borrow  = async (parent,args,context) => {
     });
 
 
-    const countofrent = userwithrent.filter(e =>{
-        if(!e.isBack)
-        {
-            return true;
-        }
-        return false;
-    }).length;
+    const countofrent = userwithrent.filter(rent => !rent.isBack).length;
 
     if(countofrent < 5){
         return context.prisma.createRent({
@@ -79,8 +73,54 @@ const borrow  = async (parent,args,context) => {
     throw new Error('You have already rented 5 books this month');
 };
 
+const addcomment = async (parent,args,context)=>{
+    const userid = getUserId(context);
+
+    const commentExists = await context.prisma.$exists.comment({
+        user: { id: userid },
+        book: { id: args.idBook },
+    });
+
+    if (commentExists){
+        throw new Error('You have already comment this book');
+    }
+
+    if (isNaN(args.bookeval)){
+        throw new Error('Bookeval must be a NUMBER');
+    }
+
+    return context.prisma.createComment({
+        book:{connect: {id:args.idBook}},
+        user:{connect: {id:userid}},
+        bookeval:args.bookeval,
+        title:args.title,
+        comment:args.comment
+    });
+};
+
+const addvote = async (parent,args,context)=>{
+    const userid = getUserId(context);
+
+    const voteExists = await context.prisma.$exists.vote({
+        user: { id: userid },
+        comment: { id: args.idComment },
+    });
+
+    if (voteExists){
+        throw new Error('You have already vote for this book');
+    }
+
+    return context.prisma.createVote({
+        comment:{connect: {id:args.idComment}},
+        user:{connect: {id:userid}},
+        usefull:args.usefull
+    });
+};
+
 module.exports = {
     signup,
     login,
     borrow,
+    addcomment,
+    addvote,
 };

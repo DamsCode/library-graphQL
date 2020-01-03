@@ -20,6 +20,7 @@ export interface Exists {
   comment: (where?: CommentWhereInput) => Promise<boolean>;
   rent: (where?: RentWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
+  vote: (where?: VoteWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -117,6 +118,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => UserConnectionPromise;
+  vote: (where: VoteWhereUniqueInput) => VoteNullablePromise;
+  votes: (args?: {
+    where?: VoteWhereInput;
+    orderBy?: VoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Vote>;
+  votesConnection: (args?: {
+    where?: VoteWhereInput;
+    orderBy?: VoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => VoteConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -187,6 +207,22 @@ export interface Prisma {
   }) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
+  createVote: (data: VoteCreateInput) => VotePromise;
+  updateVote: (args: {
+    data: VoteUpdateInput;
+    where: VoteWhereUniqueInput;
+  }) => VotePromise;
+  updateManyVotes: (args: {
+    data: VoteUpdateManyMutationInput;
+    where?: VoteWhereInput;
+  }) => BatchPayloadPromise;
+  upsertVote: (args: {
+    where: VoteWhereUniqueInput;
+    create: VoteCreateInput;
+    update: VoteUpdateInput;
+  }) => VotePromise;
+  deleteVote: (where: VoteWhereUniqueInput) => VotePromise;
+  deleteManyVotes: (where?: VoteWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -208,6 +244,9 @@ export interface Subscription {
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
+  vote: (
+    where?: VoteSubscriptionWhereInput
+  ) => VoteSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -226,11 +265,7 @@ export type CommentOrderByInput =
   | "comment_ASC"
   | "comment_DESC"
   | "bookeval_ASC"
-  | "bookeval_DESC"
-  | "usefull_ASC"
-  | "usefull_DESC"
-  | "notusefull_ASC"
-  | "notusefull_DESC";
+  | "bookeval_DESC";
 
 export type RentOrderByInput =
   | "id_ASC"
@@ -241,6 +276,12 @@ export type RentOrderByInput =
   | "backAt_DESC"
   | "isBack_ASC"
   | "isBack_DESC";
+
+export type VoteOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "usefull_ASC"
+  | "usefull_DESC";
 
 export type BookOrderByInput =
   | "id_ASC"
@@ -327,22 +368,9 @@ export interface CommentWhereInput {
   bookeval_gte?: Maybe<Int>;
   book?: Maybe<BookWhereInput>;
   user?: Maybe<UserWhereInput>;
-  usefull?: Maybe<Int>;
-  usefull_not?: Maybe<Int>;
-  usefull_in?: Maybe<Int[] | Int>;
-  usefull_not_in?: Maybe<Int[] | Int>;
-  usefull_lt?: Maybe<Int>;
-  usefull_lte?: Maybe<Int>;
-  usefull_gt?: Maybe<Int>;
-  usefull_gte?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
-  notusefull_not?: Maybe<Int>;
-  notusefull_in?: Maybe<Int[] | Int>;
-  notusefull_not_in?: Maybe<Int[] | Int>;
-  notusefull_lt?: Maybe<Int>;
-  notusefull_lte?: Maybe<Int>;
-  notusefull_gt?: Maybe<Int>;
-  notusefull_gte?: Maybe<Int>;
+  vote_every?: Maybe<VoteWhereInput>;
+  vote_some?: Maybe<VoteWhereInput>;
+  vote_none?: Maybe<VoteWhereInput>;
   AND?: Maybe<CommentWhereInput[] | CommentWhereInput>;
   OR?: Maybe<CommentWhereInput[] | CommentWhereInput>;
   NOT?: Maybe<CommentWhereInput[] | CommentWhereInput>;
@@ -566,6 +594,30 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export interface VoteWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  comment?: Maybe<CommentWhereInput>;
+  user?: Maybe<UserWhereInput>;
+  usefull?: Maybe<Boolean>;
+  usefull_not?: Maybe<Boolean>;
+  AND?: Maybe<VoteWhereInput[] | VoteWhereInput>;
+  OR?: Maybe<VoteWhereInput[] | VoteWhereInput>;
+  NOT?: Maybe<VoteWhereInput[] | VoteWhereInput>;
+}
+
 export type CommentWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
@@ -577,6 +629,10 @@ export type RentWhereUniqueInput = AtLeastOne<{
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
+}>;
+
+export type VoteWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
 }>;
 
 export interface BookCreateInput {
@@ -609,8 +665,7 @@ export interface CommentCreateWithoutBookInput {
   comment: String;
   bookeval?: Maybe<Int>;
   user: UserCreateOneWithoutCommentsInput;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
+  vote?: Maybe<VoteCreateManyWithoutCommentInput>;
 }
 
 export interface UserCreateOneWithoutCommentsInput {
@@ -656,6 +711,66 @@ export interface BookCreateWithoutRentInput {
   comments?: Maybe<CommentCreateManyWithoutBookInput>;
 }
 
+export interface VoteCreateManyWithoutCommentInput {
+  create?: Maybe<
+    VoteCreateWithoutCommentInput[] | VoteCreateWithoutCommentInput
+  >;
+  connect?: Maybe<VoteWhereUniqueInput[] | VoteWhereUniqueInput>;
+}
+
+export interface VoteCreateWithoutCommentInput {
+  id?: Maybe<ID_Input>;
+  user: UserCreateOneInput;
+  usefull?: Maybe<Boolean>;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  email: String;
+  password: String;
+  comments?: Maybe<CommentCreateManyWithoutUserInput>;
+  rent?: Maybe<RentCreateManyWithoutUserInput>;
+}
+
+export interface CommentCreateManyWithoutUserInput {
+  create?: Maybe<
+    CommentCreateWithoutUserInput[] | CommentCreateWithoutUserInput
+  >;
+  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+}
+
+export interface CommentCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  comment: String;
+  bookeval?: Maybe<Int>;
+  book: BookCreateOneWithoutCommentsInput;
+  vote?: Maybe<VoteCreateManyWithoutCommentInput>;
+}
+
+export interface BookCreateOneWithoutCommentsInput {
+  create?: Maybe<BookCreateWithoutCommentsInput>;
+  connect?: Maybe<BookWhereUniqueInput>;
+}
+
+export interface BookCreateWithoutCommentsInput {
+  id?: Maybe<ID_Input>;
+  isbn: String;
+  title: String;
+  authors?: Maybe<BookCreateauthorsInput>;
+  editor: String;
+  format: String;
+  language: String;
+  cover: String;
+  rent?: Maybe<RentCreateManyWithoutBookInput>;
+}
+
 export interface RentCreateManyWithoutBookInput {
   create?: Maybe<RentCreateWithoutBookInput[] | RentCreateWithoutBookInput>;
   connect?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
@@ -680,40 +795,6 @@ export interface UserCreateWithoutRentInput {
   email: String;
   password: String;
   comments?: Maybe<CommentCreateManyWithoutUserInput>;
-}
-
-export interface CommentCreateManyWithoutUserInput {
-  create?: Maybe<
-    CommentCreateWithoutUserInput[] | CommentCreateWithoutUserInput
-  >;
-  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-}
-
-export interface CommentCreateWithoutUserInput {
-  id?: Maybe<ID_Input>;
-  title?: Maybe<String>;
-  comment: String;
-  bookeval?: Maybe<Int>;
-  book: BookCreateOneWithoutCommentsInput;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
-}
-
-export interface BookCreateOneWithoutCommentsInput {
-  create?: Maybe<BookCreateWithoutCommentsInput>;
-  connect?: Maybe<BookWhereUniqueInput>;
-}
-
-export interface BookCreateWithoutCommentsInput {
-  id?: Maybe<ID_Input>;
-  isbn: String;
-  title: String;
-  authors?: Maybe<BookCreateauthorsInput>;
-  editor: String;
-  format: String;
-  language: String;
-  cover: String;
-  rent?: Maybe<RentCreateManyWithoutBookInput>;
 }
 
 export interface BookUpdateInput {
@@ -765,8 +846,7 @@ export interface CommentUpdateWithoutBookDataInput {
   comment?: Maybe<String>;
   bookeval?: Maybe<Int>;
   user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
+  vote?: Maybe<VoteUpdateManyWithoutCommentInput>;
 }
 
 export interface UserUpdateOneRequiredWithoutCommentsInput {
@@ -898,10 +978,173 @@ export interface UserUpsertWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput;
 }
 
-export interface CommentUpsertWithWhereUniqueWithoutBookInput {
+export interface VoteUpdateManyWithoutCommentInput {
+  create?: Maybe<
+    VoteCreateWithoutCommentInput[] | VoteCreateWithoutCommentInput
+  >;
+  delete?: Maybe<VoteWhereUniqueInput[] | VoteWhereUniqueInput>;
+  connect?: Maybe<VoteWhereUniqueInput[] | VoteWhereUniqueInput>;
+  set?: Maybe<VoteWhereUniqueInput[] | VoteWhereUniqueInput>;
+  disconnect?: Maybe<VoteWhereUniqueInput[] | VoteWhereUniqueInput>;
+  update?: Maybe<
+    | VoteUpdateWithWhereUniqueWithoutCommentInput[]
+    | VoteUpdateWithWhereUniqueWithoutCommentInput
+  >;
+  upsert?: Maybe<
+    | VoteUpsertWithWhereUniqueWithoutCommentInput[]
+    | VoteUpsertWithWhereUniqueWithoutCommentInput
+  >;
+  deleteMany?: Maybe<VoteScalarWhereInput[] | VoteScalarWhereInput>;
+  updateMany?: Maybe<
+    VoteUpdateManyWithWhereNestedInput[] | VoteUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface VoteUpdateWithWhereUniqueWithoutCommentInput {
+  where: VoteWhereUniqueInput;
+  data: VoteUpdateWithoutCommentDataInput;
+}
+
+export interface VoteUpdateWithoutCommentDataInput {
+  user?: Maybe<UserUpdateOneRequiredInput>;
+  usefull?: Maybe<Boolean>;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  comments?: Maybe<CommentUpdateManyWithoutUserInput>;
+  rent?: Maybe<RentUpdateManyWithoutUserInput>;
+}
+
+export interface CommentUpdateManyWithoutUserInput {
+  create?: Maybe<
+    CommentCreateWithoutUserInput[] | CommentCreateWithoutUserInput
+  >;
+  delete?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  set?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  disconnect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  update?: Maybe<
+    | CommentUpdateWithWhereUniqueWithoutUserInput[]
+    | CommentUpdateWithWhereUniqueWithoutUserInput
+  >;
+  upsert?: Maybe<
+    | CommentUpsertWithWhereUniqueWithoutUserInput[]
+    | CommentUpsertWithWhereUniqueWithoutUserInput
+  >;
+  deleteMany?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
+  updateMany?: Maybe<
+    | CommentUpdateManyWithWhereNestedInput[]
+    | CommentUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CommentUpdateWithWhereUniqueWithoutUserInput {
   where: CommentWhereUniqueInput;
-  update: CommentUpdateWithoutBookDataInput;
-  create: CommentCreateWithoutBookInput;
+  data: CommentUpdateWithoutUserDataInput;
+}
+
+export interface CommentUpdateWithoutUserDataInput {
+  title?: Maybe<String>;
+  comment?: Maybe<String>;
+  bookeval?: Maybe<Int>;
+  book?: Maybe<BookUpdateOneRequiredWithoutCommentsInput>;
+  vote?: Maybe<VoteUpdateManyWithoutCommentInput>;
+}
+
+export interface BookUpdateOneRequiredWithoutCommentsInput {
+  create?: Maybe<BookCreateWithoutCommentsInput>;
+  update?: Maybe<BookUpdateWithoutCommentsDataInput>;
+  upsert?: Maybe<BookUpsertWithoutCommentsInput>;
+  connect?: Maybe<BookWhereUniqueInput>;
+}
+
+export interface BookUpdateWithoutCommentsDataInput {
+  isbn?: Maybe<String>;
+  title?: Maybe<String>;
+  authors?: Maybe<BookUpdateauthorsInput>;
+  editor?: Maybe<String>;
+  format?: Maybe<String>;
+  language?: Maybe<String>;
+  cover?: Maybe<String>;
+  rent?: Maybe<RentUpdateManyWithoutBookInput>;
+}
+
+export interface RentUpdateManyWithoutBookInput {
+  create?: Maybe<RentCreateWithoutBookInput[] | RentCreateWithoutBookInput>;
+  delete?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
+  connect?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
+  set?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
+  disconnect?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
+  update?: Maybe<
+    | RentUpdateWithWhereUniqueWithoutBookInput[]
+    | RentUpdateWithWhereUniqueWithoutBookInput
+  >;
+  upsert?: Maybe<
+    | RentUpsertWithWhereUniqueWithoutBookInput[]
+    | RentUpsertWithWhereUniqueWithoutBookInput
+  >;
+  deleteMany?: Maybe<RentScalarWhereInput[] | RentScalarWhereInput>;
+  updateMany?: Maybe<
+    RentUpdateManyWithWhereNestedInput[] | RentUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface RentUpdateWithWhereUniqueWithoutBookInput {
+  where: RentWhereUniqueInput;
+  data: RentUpdateWithoutBookDataInput;
+}
+
+export interface RentUpdateWithoutBookDataInput {
+  user?: Maybe<UserUpdateOneRequiredWithoutRentInput>;
+  rentAt?: Maybe<DateTimeInput>;
+  backAt?: Maybe<DateTimeInput>;
+  isBack?: Maybe<Boolean>;
+}
+
+export interface UserUpdateOneRequiredWithoutRentInput {
+  create?: Maybe<UserCreateWithoutRentInput>;
+  update?: Maybe<UserUpdateWithoutRentDataInput>;
+  upsert?: Maybe<UserUpsertWithoutRentInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutRentDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  comments?: Maybe<CommentUpdateManyWithoutUserInput>;
+}
+
+export interface UserUpsertWithoutRentInput {
+  update: UserUpdateWithoutRentDataInput;
+  create: UserCreateWithoutRentInput;
+}
+
+export interface RentUpsertWithWhereUniqueWithoutBookInput {
+  where: RentWhereUniqueInput;
+  update: RentUpdateWithoutBookDataInput;
+  create: RentCreateWithoutBookInput;
+}
+
+export interface BookUpsertWithoutCommentsInput {
+  update: BookUpdateWithoutCommentsDataInput;
+  create: BookCreateWithoutCommentsInput;
+}
+
+export interface CommentUpsertWithWhereUniqueWithoutUserInput {
+  where: CommentWhereUniqueInput;
+  update: CommentUpdateWithoutUserDataInput;
+  create: CommentCreateWithoutUserInput;
 }
 
 export interface CommentScalarWhereInput {
@@ -955,22 +1198,6 @@ export interface CommentScalarWhereInput {
   bookeval_lte?: Maybe<Int>;
   bookeval_gt?: Maybe<Int>;
   bookeval_gte?: Maybe<Int>;
-  usefull?: Maybe<Int>;
-  usefull_not?: Maybe<Int>;
-  usefull_in?: Maybe<Int[] | Int>;
-  usefull_not_in?: Maybe<Int[] | Int>;
-  usefull_lt?: Maybe<Int>;
-  usefull_lte?: Maybe<Int>;
-  usefull_gt?: Maybe<Int>;
-  usefull_gte?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
-  notusefull_not?: Maybe<Int>;
-  notusefull_in?: Maybe<Int[] | Int>;
-  notusefull_not_in?: Maybe<Int[] | Int>;
-  notusefull_lt?: Maybe<Int>;
-  notusefull_lte?: Maybe<Int>;
-  notusefull_gt?: Maybe<Int>;
-  notusefull_gte?: Maybe<Int>;
   AND?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
   OR?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
   NOT?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
@@ -985,131 +1212,54 @@ export interface CommentUpdateManyDataInput {
   title?: Maybe<String>;
   comment?: Maybe<String>;
   bookeval?: Maybe<Int>;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
 }
 
-export interface RentUpdateManyWithoutBookInput {
-  create?: Maybe<RentCreateWithoutBookInput[] | RentCreateWithoutBookInput>;
-  delete?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
-  connect?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
-  set?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
-  disconnect?: Maybe<RentWhereUniqueInput[] | RentWhereUniqueInput>;
-  update?: Maybe<
-    | RentUpdateWithWhereUniqueWithoutBookInput[]
-    | RentUpdateWithWhereUniqueWithoutBookInput
-  >;
-  upsert?: Maybe<
-    | RentUpsertWithWhereUniqueWithoutBookInput[]
-    | RentUpsertWithWhereUniqueWithoutBookInput
-  >;
-  deleteMany?: Maybe<RentScalarWhereInput[] | RentScalarWhereInput>;
-  updateMany?: Maybe<
-    RentUpdateManyWithWhereNestedInput[] | RentUpdateManyWithWhereNestedInput
-  >;
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
 }
 
-export interface RentUpdateWithWhereUniqueWithoutBookInput {
-  where: RentWhereUniqueInput;
-  data: RentUpdateWithoutBookDataInput;
+export interface VoteUpsertWithWhereUniqueWithoutCommentInput {
+  where: VoteWhereUniqueInput;
+  update: VoteUpdateWithoutCommentDataInput;
+  create: VoteCreateWithoutCommentInput;
 }
 
-export interface RentUpdateWithoutBookDataInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutRentInput>;
-  rentAt?: Maybe<DateTimeInput>;
-  backAt?: Maybe<DateTimeInput>;
-  isBack?: Maybe<Boolean>;
+export interface VoteScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  usefull?: Maybe<Boolean>;
+  usefull_not?: Maybe<Boolean>;
+  AND?: Maybe<VoteScalarWhereInput[] | VoteScalarWhereInput>;
+  OR?: Maybe<VoteScalarWhereInput[] | VoteScalarWhereInput>;
+  NOT?: Maybe<VoteScalarWhereInput[] | VoteScalarWhereInput>;
 }
 
-export interface UserUpdateOneRequiredWithoutRentInput {
-  create?: Maybe<UserCreateWithoutRentInput>;
-  update?: Maybe<UserUpdateWithoutRentDataInput>;
-  upsert?: Maybe<UserUpsertWithoutRentInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface VoteUpdateManyWithWhereNestedInput {
+  where: VoteScalarWhereInput;
+  data: VoteUpdateManyDataInput;
 }
 
-export interface UserUpdateWithoutRentDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  comments?: Maybe<CommentUpdateManyWithoutUserInput>;
+export interface VoteUpdateManyDataInput {
+  usefull?: Maybe<Boolean>;
 }
 
-export interface CommentUpdateManyWithoutUserInput {
-  create?: Maybe<
-    CommentCreateWithoutUserInput[] | CommentCreateWithoutUserInput
-  >;
-  delete?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  set?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  disconnect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  update?: Maybe<
-    | CommentUpdateWithWhereUniqueWithoutUserInput[]
-    | CommentUpdateWithWhereUniqueWithoutUserInput
-  >;
-  upsert?: Maybe<
-    | CommentUpsertWithWhereUniqueWithoutUserInput[]
-    | CommentUpsertWithWhereUniqueWithoutUserInput
-  >;
-  deleteMany?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
-  updateMany?: Maybe<
-    | CommentUpdateManyWithWhereNestedInput[]
-    | CommentUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface CommentUpdateWithWhereUniqueWithoutUserInput {
+export interface CommentUpsertWithWhereUniqueWithoutBookInput {
   where: CommentWhereUniqueInput;
-  data: CommentUpdateWithoutUserDataInput;
-}
-
-export interface CommentUpdateWithoutUserDataInput {
-  title?: Maybe<String>;
-  comment?: Maybe<String>;
-  bookeval?: Maybe<Int>;
-  book?: Maybe<BookUpdateOneRequiredWithoutCommentsInput>;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
-}
-
-export interface BookUpdateOneRequiredWithoutCommentsInput {
-  create?: Maybe<BookCreateWithoutCommentsInput>;
-  update?: Maybe<BookUpdateWithoutCommentsDataInput>;
-  upsert?: Maybe<BookUpsertWithoutCommentsInput>;
-  connect?: Maybe<BookWhereUniqueInput>;
-}
-
-export interface BookUpdateWithoutCommentsDataInput {
-  isbn?: Maybe<String>;
-  title?: Maybe<String>;
-  authors?: Maybe<BookUpdateauthorsInput>;
-  editor?: Maybe<String>;
-  format?: Maybe<String>;
-  language?: Maybe<String>;
-  cover?: Maybe<String>;
-  rent?: Maybe<RentUpdateManyWithoutBookInput>;
-}
-
-export interface BookUpsertWithoutCommentsInput {
-  update: BookUpdateWithoutCommentsDataInput;
-  create: BookCreateWithoutCommentsInput;
-}
-
-export interface CommentUpsertWithWhereUniqueWithoutUserInput {
-  where: CommentWhereUniqueInput;
-  update: CommentUpdateWithoutUserDataInput;
-  create: CommentCreateWithoutUserInput;
-}
-
-export interface UserUpsertWithoutRentInput {
-  update: UserUpdateWithoutRentDataInput;
-  create: UserCreateWithoutRentInput;
-}
-
-export interface RentUpsertWithWhereUniqueWithoutBookInput {
-  where: RentWhereUniqueInput;
-  update: RentUpdateWithoutBookDataInput;
-  create: RentCreateWithoutBookInput;
+  update: CommentUpdateWithoutBookDataInput;
+  create: CommentCreateWithoutBookInput;
 }
 
 export interface BookUpdateManyMutationInput {
@@ -1129,8 +1279,7 @@ export interface CommentCreateInput {
   bookeval?: Maybe<Int>;
   book: BookCreateOneWithoutCommentsInput;
   user: UserCreateOneWithoutCommentsInput;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
+  vote?: Maybe<VoteCreateManyWithoutCommentInput>;
 }
 
 export interface CommentUpdateInput {
@@ -1139,16 +1288,13 @@ export interface CommentUpdateInput {
   bookeval?: Maybe<Int>;
   book?: Maybe<BookUpdateOneRequiredWithoutCommentsInput>;
   user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
+  vote?: Maybe<VoteUpdateManyWithoutCommentInput>;
 }
 
 export interface CommentUpdateManyMutationInput {
   title?: Maybe<String>;
   comment?: Maybe<String>;
   bookeval?: Maybe<Int>;
-  usefull?: Maybe<Int>;
-  notusefull?: Maybe<Int>;
 }
 
 export interface RentCreateInput {
@@ -1174,15 +1320,6 @@ export interface RentUpdateManyMutationInput {
   isBack?: Maybe<Boolean>;
 }
 
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  email: String;
-  password: String;
-  comments?: Maybe<CommentCreateManyWithoutUserInput>;
-  rent?: Maybe<RentCreateManyWithoutUserInput>;
-}
-
 export interface UserUpdateInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
@@ -1195,6 +1332,57 @@ export interface UserUpdateManyMutationInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+}
+
+export interface VoteCreateInput {
+  id?: Maybe<ID_Input>;
+  comment: CommentCreateOneWithoutVoteInput;
+  user: UserCreateOneInput;
+  usefull?: Maybe<Boolean>;
+}
+
+export interface CommentCreateOneWithoutVoteInput {
+  create?: Maybe<CommentCreateWithoutVoteInput>;
+  connect?: Maybe<CommentWhereUniqueInput>;
+}
+
+export interface CommentCreateWithoutVoteInput {
+  id?: Maybe<ID_Input>;
+  title?: Maybe<String>;
+  comment: String;
+  bookeval?: Maybe<Int>;
+  book: BookCreateOneWithoutCommentsInput;
+  user: UserCreateOneWithoutCommentsInput;
+}
+
+export interface VoteUpdateInput {
+  comment?: Maybe<CommentUpdateOneRequiredWithoutVoteInput>;
+  user?: Maybe<UserUpdateOneRequiredInput>;
+  usefull?: Maybe<Boolean>;
+}
+
+export interface CommentUpdateOneRequiredWithoutVoteInput {
+  create?: Maybe<CommentCreateWithoutVoteInput>;
+  update?: Maybe<CommentUpdateWithoutVoteDataInput>;
+  upsert?: Maybe<CommentUpsertWithoutVoteInput>;
+  connect?: Maybe<CommentWhereUniqueInput>;
+}
+
+export interface CommentUpdateWithoutVoteDataInput {
+  title?: Maybe<String>;
+  comment?: Maybe<String>;
+  bookeval?: Maybe<Int>;
+  book?: Maybe<BookUpdateOneRequiredWithoutCommentsInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
+}
+
+export interface CommentUpsertWithoutVoteInput {
+  update: CommentUpdateWithoutVoteDataInput;
+  create: CommentCreateWithoutVoteInput;
+}
+
+export interface VoteUpdateManyMutationInput {
+  usefull?: Maybe<Boolean>;
 }
 
 export interface BookSubscriptionWhereInput {
@@ -1239,6 +1427,17 @@ export interface UserSubscriptionWhereInput {
   AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
   OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+}
+
+export interface VoteSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<VoteWhereInput>;
+  AND?: Maybe<VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput>;
+  OR?: Maybe<VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput>;
+  NOT?: Maybe<VoteSubscriptionWhereInput[] | VoteSubscriptionWhereInput>;
 }
 
 export interface NodeNode {
@@ -1352,8 +1551,6 @@ export interface Comment {
   title?: String;
   comment: String;
   bookeval?: Int;
-  usefull?: Int;
-  notusefull?: Int;
 }
 
 export interface CommentPromise extends Promise<Comment>, Fragmentable {
@@ -1363,8 +1560,15 @@ export interface CommentPromise extends Promise<Comment>, Fragmentable {
   bookeval: () => Promise<Int>;
   book: <T = BookPromise>() => T;
   user: <T = UserPromise>() => T;
-  usefull: () => Promise<Int>;
-  notusefull: () => Promise<Int>;
+  vote: <T = FragmentableArray<Vote>>(args?: {
+    where?: VoteWhereInput;
+    orderBy?: VoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface CommentSubscription
@@ -1376,8 +1580,15 @@ export interface CommentSubscription
   bookeval: () => Promise<AsyncIterator<Int>>;
   book: <T = BookSubscription>() => T;
   user: <T = UserSubscription>() => T;
-  usefull: () => Promise<AsyncIterator<Int>>;
-  notusefull: () => Promise<AsyncIterator<Int>>;
+  vote: <T = Promise<AsyncIterator<VoteSubscription>>>(args?: {
+    where?: VoteWhereInput;
+    orderBy?: VoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface CommentNullablePromise
@@ -1389,8 +1600,15 @@ export interface CommentNullablePromise
   bookeval: () => Promise<Int>;
   book: <T = BookPromise>() => T;
   user: <T = UserPromise>() => T;
-  usefull: () => Promise<Int>;
-  notusefull: () => Promise<Int>;
+  vote: <T = FragmentableArray<Vote>>(args?: {
+    where?: VoteWhereInput;
+    orderBy?: VoteOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface User {
@@ -1515,6 +1733,36 @@ export interface RentNullablePromise
   rentAt: () => Promise<DateTimeOutput>;
   backAt: () => Promise<DateTimeOutput>;
   isBack: () => Promise<Boolean>;
+}
+
+export interface Vote {
+  id: ID_Output;
+  usefull?: Boolean;
+}
+
+export interface VotePromise extends Promise<Vote>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  comment: <T = CommentPromise>() => T;
+  user: <T = UserPromise>() => T;
+  usefull: () => Promise<Boolean>;
+}
+
+export interface VoteSubscription
+  extends Promise<AsyncIterator<Vote>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  comment: <T = CommentSubscription>() => T;
+  user: <T = UserSubscription>() => T;
+  usefull: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface VoteNullablePromise
+  extends Promise<Vote | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  comment: <T = CommentPromise>() => T;
+  user: <T = UserPromise>() => T;
+  usefull: () => Promise<Boolean>;
 }
 
 export interface BookConnection {
@@ -1756,6 +2004,60 @@ export interface AggregateUserSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface VoteConnection {
+  pageInfo: PageInfo;
+  edges: VoteEdge[];
+}
+
+export interface VoteConnectionPromise
+  extends Promise<VoteConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<VoteEdge>>() => T;
+  aggregate: <T = AggregateVotePromise>() => T;
+}
+
+export interface VoteConnectionSubscription
+  extends Promise<AsyncIterator<VoteConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<VoteEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateVoteSubscription>() => T;
+}
+
+export interface VoteEdge {
+  node: Vote;
+  cursor: String;
+}
+
+export interface VoteEdgePromise extends Promise<VoteEdge>, Fragmentable {
+  node: <T = VotePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface VoteEdgeSubscription
+  extends Promise<AsyncIterator<VoteEdge>>,
+    Fragmentable {
+  node: <T = VoteSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateVote {
+  count: Int;
+}
+
+export interface AggregateVotePromise
+  extends Promise<AggregateVote>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateVoteSubscription
+  extends Promise<AsyncIterator<AggregateVote>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface BatchPayload {
   count: Long;
 }
@@ -1864,8 +2166,6 @@ export interface CommentPreviousValues {
   title?: String;
   comment: String;
   bookeval?: Int;
-  usefull?: Int;
-  notusefull?: Int;
 }
 
 export interface CommentPreviousValuesPromise
@@ -1875,8 +2175,6 @@ export interface CommentPreviousValuesPromise
   title: () => Promise<String>;
   comment: () => Promise<String>;
   bookeval: () => Promise<Int>;
-  usefull: () => Promise<Int>;
-  notusefull: () => Promise<Int>;
 }
 
 export interface CommentPreviousValuesSubscription
@@ -1886,8 +2184,6 @@ export interface CommentPreviousValuesSubscription
   title: () => Promise<AsyncIterator<String>>;
   comment: () => Promise<AsyncIterator<String>>;
   bookeval: () => Promise<AsyncIterator<Int>>;
-  usefull: () => Promise<AsyncIterator<Int>>;
-  notusefull: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface RentSubscriptionPayload {
@@ -1990,6 +2286,50 @@ export interface UserPreviousValuesSubscription
   password: () => Promise<AsyncIterator<String>>;
 }
 
+export interface VoteSubscriptionPayload {
+  mutation: MutationType;
+  node: Vote;
+  updatedFields: String[];
+  previousValues: VotePreviousValues;
+}
+
+export interface VoteSubscriptionPayloadPromise
+  extends Promise<VoteSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = VotePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = VotePreviousValuesPromise>() => T;
+}
+
+export interface VoteSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<VoteSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = VoteSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = VotePreviousValuesSubscription>() => T;
+}
+
+export interface VotePreviousValues {
+  id: ID_Output;
+  usefull?: Boolean;
+}
+
+export interface VotePreviousValuesPromise
+  extends Promise<VotePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  usefull: () => Promise<Boolean>;
+}
+
+export interface VotePreviousValuesSubscription
+  extends Promise<AsyncIterator<VotePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  usefull: () => Promise<AsyncIterator<Boolean>>;
+}
+
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
@@ -2042,6 +2382,10 @@ export const models: Model[] = [
   },
   {
     name: "Rent",
+    embedded: false
+  },
+  {
+    name: "Vote",
     embedded: false
   }
 ];

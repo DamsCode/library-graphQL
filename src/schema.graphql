@@ -6,6 +6,8 @@ type Mutation{
     signup(email: String!, password: String!, name: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
     borrow(idBook: ID!):Rent!
+    addcomment(idBook: ID!,title: String, comment: String!, bookeval: Int): Comment!
+    addvote(idComment:ID!,usefull: Boolean!):Vote!
 }
 
 type AuthPayload {
@@ -60,9 +62,16 @@ type Comment{
     bookeval: Int
     book: Book!
     user: User!
-    usefull: Int
-    notusefull:Int
+    vote: [Vote!]!
 }
+
+type Vote{
+    id: ID!
+    comment: Comment!
+    user: User!
+    usefull: Boolean
+}
+
 
 type Rent{
     id: ID!
