@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { APP_SECRET, getUserId } = require('../utils');
-const { addMonths } = require('date-fns');
+const addMonths  = require('date-fns/addMonths');
+const parseISO  = require('date-fns/parseISO');
 
 const signup = async (parent,args,context)=>{
 
@@ -47,12 +48,11 @@ const borrow  = async (parent,args,context) => {
         .user({id:userid})
         .rent();
 
-    let date = new Date();
     const nowd = new Date();
 
-    const countofrent = userwithrent.forEach(async e =>{
-        date.setDate(addMonths(e.rentAt,1));
-        if(!e.isBack && date < nowd);
+    await userwithrent.forEach(async e => {
+        let date = new Date(addMonths(parseISO(e.rentAt),1));
+        if(!e.isBack && date < nowd)
         {
             const book = await context.prisma.rent({id:e.id}).book();
             throw new Error(`You must return the book ${book.title}  before you can rent another one`);
@@ -60,12 +60,12 @@ const borrow  = async (parent,args,context) => {
     });
 
 
-    userwithrent.filter(e =>{
-        date.setDate(addMonths(e.rentAt,1));
-        if(!e.isBack && date <= nowd);
+    const countofrent = userwithrent.filter(e =>{
+        if(!e.isBack)
         {
-            return true
+            return true;
         }
+        return false;
     }).length;
 
     if(countofrent < 5){
