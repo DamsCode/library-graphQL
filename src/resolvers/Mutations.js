@@ -38,7 +38,7 @@ const borrow  = async (parent,args,context) => {
     const userid = getUserId(context);
     const bookwithrent = await context.prisma
         .book({id:args.idBook})
-        .rent();
+        .rents();
 
     if (bookwithrent.length !== 0 &&!bookwithrent.isBack){
         throw new Error('This book is already rented');
@@ -46,7 +46,7 @@ const borrow  = async (parent,args,context) => {
 
     const userwithrent = await context.prisma
         .user({id:userid})
-        .rent();
+        .rents();
 
     const nowd = new Date();
 
@@ -117,10 +117,38 @@ const addvote = async (parent,args,context)=>{
     });
 };
 
+const addbook = async (parent,args,context)=>{
+    getUserId(context);
+    return context.prisma.createBook({
+        isbn: args.isbn,
+        title: args.title,
+        authors: {set: args.authors},
+        editor: args.editor,
+        format: args.format,
+        language:args.format,
+        cover: args.cover
+    });
+};
+
+const bookcomeback = async (parent,args,context)=>{
+    getUserId(context);
+    return context.prisma.updateRent({
+        data: {
+            backAt: new Date(),
+            isBack:true
+        },
+        where: {
+            id: args.idRent,
+        },
+    });
+};
+
 module.exports = {
     signup,
     login,
     borrow,
     addcomment,
     addvote,
+    addbook,
+    bookcomeback,
 };

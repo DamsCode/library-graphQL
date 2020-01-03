@@ -35,9 +35,9 @@ type Book {
   editor: String!
   format: String!
   language: String!
-  cover: String!
+  cover: String
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
-  rent(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
+  rents(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
 }
 
 type BookConnection {
@@ -58,9 +58,9 @@ input BookCreateInput {
   editor: String!
   format: String!
   language: String!
-  cover: String!
+  cover: String
   comments: CommentCreateManyWithoutBookInput
-  rent: RentCreateManyWithoutBookInput
+  rents: RentCreateManyWithoutBookInput
 }
 
 input BookCreateOneWithoutCommentsInput {
@@ -68,8 +68,8 @@ input BookCreateOneWithoutCommentsInput {
   connect: BookWhereUniqueInput
 }
 
-input BookCreateOneWithoutRentInput {
-  create: BookCreateWithoutRentInput
+input BookCreateOneWithoutRentsInput {
+  create: BookCreateWithoutRentsInput
   connect: BookWhereUniqueInput
 }
 
@@ -81,11 +81,11 @@ input BookCreateWithoutCommentsInput {
   editor: String!
   format: String!
   language: String!
-  cover: String!
-  rent: RentCreateManyWithoutBookInput
+  cover: String
+  rents: RentCreateManyWithoutBookInput
 }
 
-input BookCreateWithoutRentInput {
+input BookCreateWithoutRentsInput {
   id: ID
   isbn: String!
   title: String!
@@ -93,7 +93,7 @@ input BookCreateWithoutRentInput {
   editor: String!
   format: String!
   language: String!
-  cover: String!
+  cover: String
   comments: CommentCreateManyWithoutBookInput
 }
 
@@ -127,7 +127,7 @@ type BookPreviousValues {
   editor: String!
   format: String!
   language: String!
-  cover: String!
+  cover: String
 }
 
 type BookSubscriptionPayload {
@@ -161,7 +161,7 @@ input BookUpdateInput {
   language: String
   cover: String
   comments: CommentUpdateManyWithoutBookInput
-  rent: RentUpdateManyWithoutBookInput
+  rents: RentUpdateManyWithoutBookInput
 }
 
 input BookUpdateManyMutationInput {
@@ -181,10 +181,10 @@ input BookUpdateOneRequiredWithoutCommentsInput {
   connect: BookWhereUniqueInput
 }
 
-input BookUpdateOneRequiredWithoutRentInput {
-  create: BookCreateWithoutRentInput
-  update: BookUpdateWithoutRentDataInput
-  upsert: BookUpsertWithoutRentInput
+input BookUpdateOneRequiredWithoutRentsInput {
+  create: BookCreateWithoutRentsInput
+  update: BookUpdateWithoutRentsDataInput
+  upsert: BookUpsertWithoutRentsInput
   connect: BookWhereUniqueInput
 }
 
@@ -196,10 +196,10 @@ input BookUpdateWithoutCommentsDataInput {
   format: String
   language: String
   cover: String
-  rent: RentUpdateManyWithoutBookInput
+  rents: RentUpdateManyWithoutBookInput
 }
 
-input BookUpdateWithoutRentDataInput {
+input BookUpdateWithoutRentsDataInput {
   isbn: String
   title: String
   authors: BookUpdateauthorsInput
@@ -215,9 +215,9 @@ input BookUpsertWithoutCommentsInput {
   create: BookCreateWithoutCommentsInput!
 }
 
-input BookUpsertWithoutRentInput {
-  update: BookUpdateWithoutRentDataInput!
-  create: BookCreateWithoutRentInput!
+input BookUpsertWithoutRentsInput {
+  update: BookUpdateWithoutRentsDataInput!
+  create: BookCreateWithoutRentsInput!
 }
 
 input BookWhereInput {
@@ -322,9 +322,9 @@ input BookWhereInput {
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput
-  rent_every: RentWhereInput
-  rent_some: RentWhereInput
-  rent_none: RentWhereInput
+  rents_every: RentWhereInput
+  rents_some: RentWhereInput
+  rents_none: RentWhereInput
   AND: [BookWhereInput!]
   OR: [BookWhereInput!]
   NOT: [BookWhereInput!]
@@ -762,8 +762,8 @@ type RentConnection {
 
 input RentCreateInput {
   id: ID
-  book: BookCreateOneWithoutRentInput!
-  user: UserCreateOneWithoutRentInput!
+  book: BookCreateOneWithoutRentsInput!
+  user: UserCreateOneWithoutRentsInput!
   rentAt: DateTime!
   backAt: DateTime
   isBack: Boolean
@@ -781,7 +781,7 @@ input RentCreateManyWithoutUserInput {
 
 input RentCreateWithoutBookInput {
   id: ID
-  user: UserCreateOneWithoutRentInput!
+  user: UserCreateOneWithoutRentsInput!
   rentAt: DateTime!
   backAt: DateTime
   isBack: Boolean
@@ -789,7 +789,7 @@ input RentCreateWithoutBookInput {
 
 input RentCreateWithoutUserInput {
   id: ID
-  book: BookCreateOneWithoutRentInput!
+  book: BookCreateOneWithoutRentsInput!
   rentAt: DateTime!
   backAt: DateTime
   isBack: Boolean
@@ -875,8 +875,8 @@ input RentSubscriptionWhereInput {
 }
 
 input RentUpdateInput {
-  book: BookUpdateOneRequiredWithoutRentInput
-  user: UserUpdateOneRequiredWithoutRentInput
+  book: BookUpdateOneRequiredWithoutRentsInput
+  user: UserUpdateOneRequiredWithoutRentsInput
   rentAt: DateTime
   backAt: DateTime
   isBack: Boolean
@@ -924,14 +924,14 @@ input RentUpdateManyWithWhereNestedInput {
 }
 
 input RentUpdateWithoutBookDataInput {
-  user: UserUpdateOneRequiredWithoutRentInput
+  user: UserUpdateOneRequiredWithoutRentsInput
   rentAt: DateTime
   backAt: DateTime
   isBack: Boolean
 }
 
 input RentUpdateWithoutUserDataInput {
-  book: BookUpdateOneRequiredWithoutRentInput
+  book: BookUpdateOneRequiredWithoutRentsInput
   rentAt: DateTime
   backAt: DateTime
   isBack: Boolean
@@ -1017,7 +1017,7 @@ type User {
   email: String!
   password: String!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
-  rent(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
+  rents(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
 }
 
 type UserConnection {
@@ -1032,7 +1032,7 @@ input UserCreateInput {
   email: String!
   password: String!
   comments: CommentCreateManyWithoutUserInput
-  rent: RentCreateManyWithoutUserInput
+  rents: RentCreateManyWithoutUserInput
 }
 
 input UserCreateOneInput {
@@ -1045,8 +1045,8 @@ input UserCreateOneWithoutCommentsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutRentInput {
-  create: UserCreateWithoutRentInput
+input UserCreateOneWithoutRentsInput {
+  create: UserCreateWithoutRentsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1055,10 +1055,10 @@ input UserCreateWithoutCommentsInput {
   name: String!
   email: String!
   password: String!
-  rent: RentCreateManyWithoutUserInput
+  rents: RentCreateManyWithoutUserInput
 }
 
-input UserCreateWithoutRentInput {
+input UserCreateWithoutRentsInput {
   id: ID
   name: String!
   email: String!
@@ -1112,7 +1112,7 @@ input UserUpdateDataInput {
   email: String
   password: String
   comments: CommentUpdateManyWithoutUserInput
-  rent: RentUpdateManyWithoutUserInput
+  rents: RentUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -1120,7 +1120,7 @@ input UserUpdateInput {
   email: String
   password: String
   comments: CommentUpdateManyWithoutUserInput
-  rent: RentUpdateManyWithoutUserInput
+  rents: RentUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -1143,10 +1143,10 @@ input UserUpdateOneRequiredWithoutCommentsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutRentInput {
-  create: UserCreateWithoutRentInput
-  update: UserUpdateWithoutRentDataInput
-  upsert: UserUpsertWithoutRentInput
+input UserUpdateOneRequiredWithoutRentsInput {
+  create: UserCreateWithoutRentsInput
+  update: UserUpdateWithoutRentsDataInput
+  upsert: UserUpsertWithoutRentsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1154,10 +1154,10 @@ input UserUpdateWithoutCommentsDataInput {
   name: String
   email: String
   password: String
-  rent: RentUpdateManyWithoutUserInput
+  rents: RentUpdateManyWithoutUserInput
 }
 
-input UserUpdateWithoutRentDataInput {
+input UserUpdateWithoutRentsDataInput {
   name: String
   email: String
   password: String
@@ -1174,9 +1174,9 @@ input UserUpsertWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput!
 }
 
-input UserUpsertWithoutRentInput {
-  update: UserUpdateWithoutRentDataInput!
-  create: UserCreateWithoutRentInput!
+input UserUpsertWithoutRentsInput {
+  update: UserUpdateWithoutRentsDataInput!
+  create: UserCreateWithoutRentsInput!
 }
 
 input UserWhereInput {
@@ -1239,9 +1239,9 @@ input UserWhereInput {
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput
-  rent_every: RentWhereInput
-  rent_some: RentWhereInput
-  rent_none: RentWhereInput
+  rents_every: RentWhereInput
+  rents_some: RentWhereInput
+  rents_none: RentWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

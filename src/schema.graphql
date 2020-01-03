@@ -1,5 +1,6 @@
 type Query {
     FeedBooks(filter: String, skip: Int, first: Int, orderBy: BookOrderByInput):FeedBooks!
+    getProfile:User!
 }
 
 type Mutation{
@@ -8,6 +9,8 @@ type Mutation{
     borrow(idBook: ID!):Rent!
     addcomment(idBook: ID!,title: String, comment: String!, bookeval: Int): Comment!
     addvote(idComment:ID!,usefull: Boolean!):Vote!
+    addbook(isbn: String!,title: String!, authors: [String!]!, editor:String!, format: String!, language: String!, cover: String):Book!
+    bookcomeback(idRent: ID!):Rent!
 }
 
 type AuthPayload {
@@ -30,7 +33,7 @@ type Book{
     language:String!
     cover: String
     comments:[Comment!]
-    rent: [Rent!]
+    rents: [Rent!]
 }
 
 enum BookOrderByInput {
@@ -52,7 +55,7 @@ type User {
     email: String!
     password: String!
     comments:[Comment!]!
-    rent: [Rent!]!
+    rents: [Rent!]!
 }
 
 type Comment{

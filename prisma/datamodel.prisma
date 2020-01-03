@@ -6,9 +6,9 @@ type Book{
     editor:String!
     format: String!
     language:String!
-    cover: String!
+    cover: String
     comments:[Comment!]!
-    rent: [Rent!]!
+    rents: [Rent!]!
 }
 
 
@@ -18,7 +18,7 @@ type User {
     email: String! @unique
     password: String!
     comments:[Comment!]!
-    rent: [Rent!]!
+    rents: [Rent!]!
 }
 
 type Comment{

@@ -2,11 +2,11 @@ const comments = (parent,args,context)=>{
     return context.prisma.book({ id: parent.id }).comments();
 };
 
-const rent = (parent,args,context)=>{
-    return context.prisma.book({ id: parent.id }).rent();
+const rents = (parent,args,context)=>{
+    return context.prisma.book({ id: parent.id }).rents();
 };
 
 module.exports = {
     comments,
-    rent,
+    rents,
 };

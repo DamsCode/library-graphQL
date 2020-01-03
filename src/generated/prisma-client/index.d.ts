@@ -478,9 +478,9 @@ export interface BookWhereInput {
   comments_every?: Maybe<CommentWhereInput>;
   comments_some?: Maybe<CommentWhereInput>;
   comments_none?: Maybe<CommentWhereInput>;
-  rent_every?: Maybe<RentWhereInput>;
-  rent_some?: Maybe<RentWhereInput>;
-  rent_none?: Maybe<RentWhereInput>;
+  rents_every?: Maybe<RentWhereInput>;
+  rents_some?: Maybe<RentWhereInput>;
+  rents_none?: Maybe<RentWhereInput>;
   AND?: Maybe<BookWhereInput[] | BookWhereInput>;
   OR?: Maybe<BookWhereInput[] | BookWhereInput>;
   NOT?: Maybe<BookWhereInput[] | BookWhereInput>;
@@ -586,9 +586,9 @@ export interface UserWhereInput {
   comments_every?: Maybe<CommentWhereInput>;
   comments_some?: Maybe<CommentWhereInput>;
   comments_none?: Maybe<CommentWhereInput>;
-  rent_every?: Maybe<RentWhereInput>;
-  rent_some?: Maybe<RentWhereInput>;
-  rent_none?: Maybe<RentWhereInput>;
+  rents_every?: Maybe<RentWhereInput>;
+  rents_some?: Maybe<RentWhereInput>;
+  rents_none?: Maybe<RentWhereInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
@@ -643,9 +643,9 @@ export interface BookCreateInput {
   editor: String;
   format: String;
   language: String;
-  cover: String;
+  cover?: Maybe<String>;
   comments?: Maybe<CommentCreateManyWithoutBookInput>;
-  rent?: Maybe<RentCreateManyWithoutBookInput>;
+  rents?: Maybe<RentCreateManyWithoutBookInput>;
 }
 
 export interface BookCreateauthorsInput {
@@ -678,7 +678,7 @@ export interface UserCreateWithoutCommentsInput {
   name: String;
   email: String;
   password: String;
-  rent?: Maybe<RentCreateManyWithoutUserInput>;
+  rents?: Maybe<RentCreateManyWithoutUserInput>;
 }
 
 export interface RentCreateManyWithoutUserInput {
@@ -688,18 +688,18 @@ export interface RentCreateManyWithoutUserInput {
 
 export interface RentCreateWithoutUserInput {
   id?: Maybe<ID_Input>;
-  book: BookCreateOneWithoutRentInput;
+  book: BookCreateOneWithoutRentsInput;
   rentAt: DateTimeInput;
   backAt?: Maybe<DateTimeInput>;
   isBack?: Maybe<Boolean>;
 }
 
-export interface BookCreateOneWithoutRentInput {
-  create?: Maybe<BookCreateWithoutRentInput>;
+export interface BookCreateOneWithoutRentsInput {
+  create?: Maybe<BookCreateWithoutRentsInput>;
   connect?: Maybe<BookWhereUniqueInput>;
 }
 
-export interface BookCreateWithoutRentInput {
+export interface BookCreateWithoutRentsInput {
   id?: Maybe<ID_Input>;
   isbn: String;
   title: String;
@@ -707,7 +707,7 @@ export interface BookCreateWithoutRentInput {
   editor: String;
   format: String;
   language: String;
-  cover: String;
+  cover?: Maybe<String>;
   comments?: Maybe<CommentCreateManyWithoutBookInput>;
 }
 
@@ -735,7 +735,7 @@ export interface UserCreateInput {
   email: String;
   password: String;
   comments?: Maybe<CommentCreateManyWithoutUserInput>;
-  rent?: Maybe<RentCreateManyWithoutUserInput>;
+  rents?: Maybe<RentCreateManyWithoutUserInput>;
 }
 
 export interface CommentCreateManyWithoutUserInput {
@@ -767,8 +767,8 @@ export interface BookCreateWithoutCommentsInput {
   editor: String;
   format: String;
   language: String;
-  cover: String;
-  rent?: Maybe<RentCreateManyWithoutBookInput>;
+  cover?: Maybe<String>;
+  rents?: Maybe<RentCreateManyWithoutBookInput>;
 }
 
 export interface RentCreateManyWithoutBookInput {
@@ -778,18 +778,18 @@ export interface RentCreateManyWithoutBookInput {
 
 export interface RentCreateWithoutBookInput {
   id?: Maybe<ID_Input>;
-  user: UserCreateOneWithoutRentInput;
+  user: UserCreateOneWithoutRentsInput;
   rentAt: DateTimeInput;
   backAt?: Maybe<DateTimeInput>;
   isBack?: Maybe<Boolean>;
 }
 
-export interface UserCreateOneWithoutRentInput {
-  create?: Maybe<UserCreateWithoutRentInput>;
+export interface UserCreateOneWithoutRentsInput {
+  create?: Maybe<UserCreateWithoutRentsInput>;
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface UserCreateWithoutRentInput {
+export interface UserCreateWithoutRentsInput {
   id?: Maybe<ID_Input>;
   name: String;
   email: String;
@@ -806,7 +806,7 @@ export interface BookUpdateInput {
   language?: Maybe<String>;
   cover?: Maybe<String>;
   comments?: Maybe<CommentUpdateManyWithoutBookInput>;
-  rent?: Maybe<RentUpdateManyWithoutBookInput>;
+  rents?: Maybe<RentUpdateManyWithoutBookInput>;
 }
 
 export interface BookUpdateauthorsInput {
@@ -860,7 +860,7 @@ export interface UserUpdateWithoutCommentsDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
-  rent?: Maybe<RentUpdateManyWithoutUserInput>;
+  rents?: Maybe<RentUpdateManyWithoutUserInput>;
 }
 
 export interface RentUpdateManyWithoutUserInput {
@@ -889,20 +889,20 @@ export interface RentUpdateWithWhereUniqueWithoutUserInput {
 }
 
 export interface RentUpdateWithoutUserDataInput {
-  book?: Maybe<BookUpdateOneRequiredWithoutRentInput>;
+  book?: Maybe<BookUpdateOneRequiredWithoutRentsInput>;
   rentAt?: Maybe<DateTimeInput>;
   backAt?: Maybe<DateTimeInput>;
   isBack?: Maybe<Boolean>;
 }
 
-export interface BookUpdateOneRequiredWithoutRentInput {
-  create?: Maybe<BookCreateWithoutRentInput>;
-  update?: Maybe<BookUpdateWithoutRentDataInput>;
-  upsert?: Maybe<BookUpsertWithoutRentInput>;
+export interface BookUpdateOneRequiredWithoutRentsInput {
+  create?: Maybe<BookCreateWithoutRentsInput>;
+  update?: Maybe<BookUpdateWithoutRentsDataInput>;
+  upsert?: Maybe<BookUpsertWithoutRentsInput>;
   connect?: Maybe<BookWhereUniqueInput>;
 }
 
-export interface BookUpdateWithoutRentDataInput {
+export interface BookUpdateWithoutRentsDataInput {
   isbn?: Maybe<String>;
   title?: Maybe<String>;
   authors?: Maybe<BookUpdateauthorsInput>;
@@ -913,9 +913,9 @@ export interface BookUpdateWithoutRentDataInput {
   comments?: Maybe<CommentUpdateManyWithoutBookInput>;
 }
 
-export interface BookUpsertWithoutRentInput {
-  update: BookUpdateWithoutRentDataInput;
-  create: BookCreateWithoutRentInput;
+export interface BookUpsertWithoutRentsInput {
+  update: BookUpdateWithoutRentsDataInput;
+  create: BookCreateWithoutRentsInput;
 }
 
 export interface RentUpsertWithWhereUniqueWithoutUserInput {
@@ -1022,7 +1022,7 @@ export interface UserUpdateDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   comments?: Maybe<CommentUpdateManyWithoutUserInput>;
-  rent?: Maybe<RentUpdateManyWithoutUserInput>;
+  rents?: Maybe<RentUpdateManyWithoutUserInput>;
 }
 
 export interface CommentUpdateManyWithoutUserInput {
@@ -1076,7 +1076,7 @@ export interface BookUpdateWithoutCommentsDataInput {
   format?: Maybe<String>;
   language?: Maybe<String>;
   cover?: Maybe<String>;
-  rent?: Maybe<RentUpdateManyWithoutBookInput>;
+  rents?: Maybe<RentUpdateManyWithoutBookInput>;
 }
 
 export interface RentUpdateManyWithoutBookInput {
@@ -1105,29 +1105,29 @@ export interface RentUpdateWithWhereUniqueWithoutBookInput {
 }
 
 export interface RentUpdateWithoutBookDataInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutRentInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutRentsInput>;
   rentAt?: Maybe<DateTimeInput>;
   backAt?: Maybe<DateTimeInput>;
   isBack?: Maybe<Boolean>;
 }
 
-export interface UserUpdateOneRequiredWithoutRentInput {
-  create?: Maybe<UserCreateWithoutRentInput>;
-  update?: Maybe<UserUpdateWithoutRentDataInput>;
-  upsert?: Maybe<UserUpsertWithoutRentInput>;
+export interface UserUpdateOneRequiredWithoutRentsInput {
+  create?: Maybe<UserCreateWithoutRentsInput>;
+  update?: Maybe<UserUpdateWithoutRentsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutRentsInput>;
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface UserUpdateWithoutRentDataInput {
+export interface UserUpdateWithoutRentsDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
   comments?: Maybe<CommentUpdateManyWithoutUserInput>;
 }
 
-export interface UserUpsertWithoutRentInput {
-  update: UserUpdateWithoutRentDataInput;
-  create: UserCreateWithoutRentInput;
+export interface UserUpsertWithoutRentsInput {
+  update: UserUpdateWithoutRentsDataInput;
+  create: UserCreateWithoutRentsInput;
 }
 
 export interface RentUpsertWithWhereUniqueWithoutBookInput {
@@ -1299,16 +1299,16 @@ export interface CommentUpdateManyMutationInput {
 
 export interface RentCreateInput {
   id?: Maybe<ID_Input>;
-  book: BookCreateOneWithoutRentInput;
-  user: UserCreateOneWithoutRentInput;
+  book: BookCreateOneWithoutRentsInput;
+  user: UserCreateOneWithoutRentsInput;
   rentAt: DateTimeInput;
   backAt?: Maybe<DateTimeInput>;
   isBack?: Maybe<Boolean>;
 }
 
 export interface RentUpdateInput {
-  book?: Maybe<BookUpdateOneRequiredWithoutRentInput>;
-  user?: Maybe<UserUpdateOneRequiredWithoutRentInput>;
+  book?: Maybe<BookUpdateOneRequiredWithoutRentsInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutRentsInput>;
   rentAt?: Maybe<DateTimeInput>;
   backAt?: Maybe<DateTimeInput>;
   isBack?: Maybe<Boolean>;
@@ -1325,7 +1325,7 @@ export interface UserUpdateInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   comments?: Maybe<CommentUpdateManyWithoutUserInput>;
-  rent?: Maybe<RentUpdateManyWithoutUserInput>;
+  rents?: Maybe<RentUpdateManyWithoutUserInput>;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -1452,7 +1452,7 @@ export interface Book {
   editor: String;
   format: String;
   language: String;
-  cover: String;
+  cover?: String;
 }
 
 export interface BookPromise extends Promise<Book>, Fragmentable {
@@ -1473,7 +1473,7 @@ export interface BookPromise extends Promise<Book>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  rent: <T = FragmentableArray<Rent>>(args?: {
+  rents: <T = FragmentableArray<Rent>>(args?: {
     where?: RentWhereInput;
     orderBy?: RentOrderByInput;
     skip?: Int;
@@ -1504,7 +1504,7 @@ export interface BookSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  rent: <T = Promise<AsyncIterator<RentSubscription>>>(args?: {
+  rents: <T = Promise<AsyncIterator<RentSubscription>>>(args?: {
     where?: RentWhereInput;
     orderBy?: RentOrderByInput;
     skip?: Int;
@@ -1535,7 +1535,7 @@ export interface BookNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-  rent: <T = FragmentableArray<Rent>>(args?: {
+  rents: <T = FragmentableArray<Rent>>(args?: {
     where?: RentWhereInput;
     orderBy?: RentOrderByInput;
     skip?: Int;
@@ -1632,7 +1632,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  rent: <T = FragmentableArray<Rent>>(args?: {
+  rents: <T = FragmentableArray<Rent>>(args?: {
     where?: RentWhereInput;
     orderBy?: RentOrderByInput;
     skip?: Int;
@@ -1659,7 +1659,7 @@ export interface UserSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  rent: <T = Promise<AsyncIterator<RentSubscription>>>(args?: {
+  rents: <T = Promise<AsyncIterator<RentSubscription>>>(args?: {
     where?: RentWhereInput;
     orderBy?: RentOrderByInput;
     skip?: Int;
@@ -1686,7 +1686,7 @@ export interface UserNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-  rent: <T = FragmentableArray<Rent>>(args?: {
+  rents: <T = FragmentableArray<Rent>>(args?: {
     where?: RentWhereInput;
     orderBy?: RentOrderByInput;
     skip?: Int;
@@ -2107,7 +2107,7 @@ export interface BookPreviousValues {
   editor: String;
   format: String;
   language: String;
-  cover: String;
+  cover?: String;
 }
 
 export interface BookPreviousValuesPromise

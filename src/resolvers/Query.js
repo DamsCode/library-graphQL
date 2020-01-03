@@ -1,3 +1,5 @@
+const {getUserId } = require('../utils');
+
 const FeedBooks = async (parent,args,context) => {
     const where = args.filter ? {
         OR: [
@@ -26,6 +28,12 @@ const FeedBooks = async (parent,args,context) => {
     }
 };
 
+const getProfile = async (parent, args, context)=>{
+    const userid = getUserId(context);
+    return context.prisma.user({id: userid});
+};
+
 module.exports = {
     FeedBooks,
+    getProfile
 };
