@@ -1,5 +1,14 @@
 # The mission was create an api with graphQL:
 
+* Encode the Books:
+    * title
+    * subtitle (if existed)
+    * autor(s)
+    * editor
+    * format
+    * language
+    * the cover
+
 * manager the users : 
     * create account (with email as identifier)
     * log in/out (we have heard of JWT, that looks interesting) -loan management :
