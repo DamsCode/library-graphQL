@@ -28,7 +28,7 @@ type Comment{
     bookeval: Int
     book: Book!
     user: User!
-    vote: [Vote!]!
+    votes: [Vote!]!
 }
 
 type Rent{

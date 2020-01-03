@@ -368,9 +368,9 @@ export interface CommentWhereInput {
   bookeval_gte?: Maybe<Int>;
   book?: Maybe<BookWhereInput>;
   user?: Maybe<UserWhereInput>;
-  vote_every?: Maybe<VoteWhereInput>;
-  vote_some?: Maybe<VoteWhereInput>;
-  vote_none?: Maybe<VoteWhereInput>;
+  votes_every?: Maybe<VoteWhereInput>;
+  votes_some?: Maybe<VoteWhereInput>;
+  votes_none?: Maybe<VoteWhereInput>;
   AND?: Maybe<CommentWhereInput[] | CommentWhereInput>;
   OR?: Maybe<CommentWhereInput[] | CommentWhereInput>;
   NOT?: Maybe<CommentWhereInput[] | CommentWhereInput>;
@@ -665,7 +665,7 @@ export interface CommentCreateWithoutBookInput {
   comment: String;
   bookeval?: Maybe<Int>;
   user: UserCreateOneWithoutCommentsInput;
-  vote?: Maybe<VoteCreateManyWithoutCommentInput>;
+  votes?: Maybe<VoteCreateManyWithoutCommentInput>;
 }
 
 export interface UserCreateOneWithoutCommentsInput {
@@ -751,7 +751,7 @@ export interface CommentCreateWithoutUserInput {
   comment: String;
   bookeval?: Maybe<Int>;
   book: BookCreateOneWithoutCommentsInput;
-  vote?: Maybe<VoteCreateManyWithoutCommentInput>;
+  votes?: Maybe<VoteCreateManyWithoutCommentInput>;
 }
 
 export interface BookCreateOneWithoutCommentsInput {
@@ -846,7 +846,7 @@ export interface CommentUpdateWithoutBookDataInput {
   comment?: Maybe<String>;
   bookeval?: Maybe<Int>;
   user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-  vote?: Maybe<VoteUpdateManyWithoutCommentInput>;
+  votes?: Maybe<VoteUpdateManyWithoutCommentInput>;
 }
 
 export interface UserUpdateOneRequiredWithoutCommentsInput {
@@ -1058,7 +1058,7 @@ export interface CommentUpdateWithoutUserDataInput {
   comment?: Maybe<String>;
   bookeval?: Maybe<Int>;
   book?: Maybe<BookUpdateOneRequiredWithoutCommentsInput>;
-  vote?: Maybe<VoteUpdateManyWithoutCommentInput>;
+  votes?: Maybe<VoteUpdateManyWithoutCommentInput>;
 }
 
 export interface BookUpdateOneRequiredWithoutCommentsInput {
@@ -1279,7 +1279,7 @@ export interface CommentCreateInput {
   bookeval?: Maybe<Int>;
   book: BookCreateOneWithoutCommentsInput;
   user: UserCreateOneWithoutCommentsInput;
-  vote?: Maybe<VoteCreateManyWithoutCommentInput>;
+  votes?: Maybe<VoteCreateManyWithoutCommentInput>;
 }
 
 export interface CommentUpdateInput {
@@ -1288,7 +1288,7 @@ export interface CommentUpdateInput {
   bookeval?: Maybe<Int>;
   book?: Maybe<BookUpdateOneRequiredWithoutCommentsInput>;
   user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-  vote?: Maybe<VoteUpdateManyWithoutCommentInput>;
+  votes?: Maybe<VoteUpdateManyWithoutCommentInput>;
 }
 
 export interface CommentUpdateManyMutationInput {
@@ -1336,17 +1336,17 @@ export interface UserUpdateManyMutationInput {
 
 export interface VoteCreateInput {
   id?: Maybe<ID_Input>;
-  comment: CommentCreateOneWithoutVoteInput;
+  comment: CommentCreateOneWithoutVotesInput;
   user: UserCreateOneInput;
   usefull?: Maybe<Boolean>;
 }
 
-export interface CommentCreateOneWithoutVoteInput {
-  create?: Maybe<CommentCreateWithoutVoteInput>;
+export interface CommentCreateOneWithoutVotesInput {
+  create?: Maybe<CommentCreateWithoutVotesInput>;
   connect?: Maybe<CommentWhereUniqueInput>;
 }
 
-export interface CommentCreateWithoutVoteInput {
+export interface CommentCreateWithoutVotesInput {
   id?: Maybe<ID_Input>;
   title?: Maybe<String>;
   comment: String;
@@ -1356,19 +1356,19 @@ export interface CommentCreateWithoutVoteInput {
 }
 
 export interface VoteUpdateInput {
-  comment?: Maybe<CommentUpdateOneRequiredWithoutVoteInput>;
+  comment?: Maybe<CommentUpdateOneRequiredWithoutVotesInput>;
   user?: Maybe<UserUpdateOneRequiredInput>;
   usefull?: Maybe<Boolean>;
 }
 
-export interface CommentUpdateOneRequiredWithoutVoteInput {
-  create?: Maybe<CommentCreateWithoutVoteInput>;
-  update?: Maybe<CommentUpdateWithoutVoteDataInput>;
-  upsert?: Maybe<CommentUpsertWithoutVoteInput>;
+export interface CommentUpdateOneRequiredWithoutVotesInput {
+  create?: Maybe<CommentCreateWithoutVotesInput>;
+  update?: Maybe<CommentUpdateWithoutVotesDataInput>;
+  upsert?: Maybe<CommentUpsertWithoutVotesInput>;
   connect?: Maybe<CommentWhereUniqueInput>;
 }
 
-export interface CommentUpdateWithoutVoteDataInput {
+export interface CommentUpdateWithoutVotesDataInput {
   title?: Maybe<String>;
   comment?: Maybe<String>;
   bookeval?: Maybe<Int>;
@@ -1376,9 +1376,9 @@ export interface CommentUpdateWithoutVoteDataInput {
   user?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
 }
 
-export interface CommentUpsertWithoutVoteInput {
-  update: CommentUpdateWithoutVoteDataInput;
-  create: CommentCreateWithoutVoteInput;
+export interface CommentUpsertWithoutVotesInput {
+  update: CommentUpdateWithoutVotesDataInput;
+  create: CommentCreateWithoutVotesInput;
 }
 
 export interface VoteUpdateManyMutationInput {
@@ -1560,7 +1560,7 @@ export interface CommentPromise extends Promise<Comment>, Fragmentable {
   bookeval: () => Promise<Int>;
   book: <T = BookPromise>() => T;
   user: <T = UserPromise>() => T;
-  vote: <T = FragmentableArray<Vote>>(args?: {
+  votes: <T = FragmentableArray<Vote>>(args?: {
     where?: VoteWhereInput;
     orderBy?: VoteOrderByInput;
     skip?: Int;
@@ -1580,7 +1580,7 @@ export interface CommentSubscription
   bookeval: () => Promise<AsyncIterator<Int>>;
   book: <T = BookSubscription>() => T;
   user: <T = UserSubscription>() => T;
-  vote: <T = Promise<AsyncIterator<VoteSubscription>>>(args?: {
+  votes: <T = Promise<AsyncIterator<VoteSubscription>>>(args?: {
     where?: VoteWhereInput;
     orderBy?: VoteOrderByInput;
     skip?: Int;
@@ -1600,7 +1600,7 @@ export interface CommentNullablePromise
   bookeval: () => Promise<Int>;
   book: <T = BookPromise>() => T;
   user: <T = UserPromise>() => T;
-  vote: <T = FragmentableArray<Vote>>(args?: {
+  votes: <T = FragmentableArray<Vote>>(args?: {
     where?: VoteWhereInput;
     orderBy?: VoteOrderByInput;
     skip?: Int;

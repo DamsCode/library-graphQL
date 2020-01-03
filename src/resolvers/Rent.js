@@ -1,8 +1,8 @@
-const book = ()=>{
-    return [];
+const book = (parent,args,context)=>{
+    return context.prisma.rent({ id: parent.id }).book();
 };
 const user = ()=>{
-    return [];
+    return context.prisma.rent({ id: parent.id }).user();
 };
 
 module.exports = {

@@ -5,6 +5,7 @@ const Comment = require("./resolvers/Comment");
 const Mutation = require("./resolvers/Mutations");
 const User = require("./resolvers/User");
 const Rent = require("./resolvers/Rent");
+const Vote = require("./resolvers/Vote");
 const { prisma } = require('./generated/prisma-client');
 
 
@@ -16,6 +17,7 @@ const resolvers = {
     User,
     Mutation,
     Rent,
+    Vote,
 
 };
 

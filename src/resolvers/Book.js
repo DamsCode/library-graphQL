@@ -1,9 +1,9 @@
-// comments:[Comment!]!
-const comments = ()=>{
-    return [];
+const comments = (parent,args,context)=>{
+    return context.prisma.book({ id: parent.id }).comments();
 };
-const rent= ()=>{
-    return [];
+
+const rent = (parent,args,context)=>{
+    return context.prisma.book({ id: parent.id }).rent();
 };
 
 module.exports = {

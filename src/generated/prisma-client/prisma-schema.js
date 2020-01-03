@@ -341,7 +341,7 @@ type Comment {
   bookeval: Int
   book: Book!
   user: User!
-  vote(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
 type CommentConnection {
@@ -357,7 +357,7 @@ input CommentCreateInput {
   bookeval: Int
   book: BookCreateOneWithoutCommentsInput!
   user: UserCreateOneWithoutCommentsInput!
-  vote: VoteCreateManyWithoutCommentInput
+  votes: VoteCreateManyWithoutCommentInput
 }
 
 input CommentCreateManyWithoutBookInput {
@@ -370,8 +370,8 @@ input CommentCreateManyWithoutUserInput {
   connect: [CommentWhereUniqueInput!]
 }
 
-input CommentCreateOneWithoutVoteInput {
-  create: CommentCreateWithoutVoteInput
+input CommentCreateOneWithoutVotesInput {
+  create: CommentCreateWithoutVotesInput
   connect: CommentWhereUniqueInput
 }
 
@@ -381,7 +381,7 @@ input CommentCreateWithoutBookInput {
   comment: String!
   bookeval: Int
   user: UserCreateOneWithoutCommentsInput!
-  vote: VoteCreateManyWithoutCommentInput
+  votes: VoteCreateManyWithoutCommentInput
 }
 
 input CommentCreateWithoutUserInput {
@@ -390,10 +390,10 @@ input CommentCreateWithoutUserInput {
   comment: String!
   bookeval: Int
   book: BookCreateOneWithoutCommentsInput!
-  vote: VoteCreateManyWithoutCommentInput
+  votes: VoteCreateManyWithoutCommentInput
 }
 
-input CommentCreateWithoutVoteInput {
+input CommentCreateWithoutVotesInput {
   id: ID
   title: String
   comment: String!
@@ -505,7 +505,7 @@ input CommentUpdateInput {
   bookeval: Int
   book: BookUpdateOneRequiredWithoutCommentsInput
   user: UserUpdateOneRequiredWithoutCommentsInput
-  vote: VoteUpdateManyWithoutCommentInput
+  votes: VoteUpdateManyWithoutCommentInput
 }
 
 input CommentUpdateManyDataInput {
@@ -549,10 +549,10 @@ input CommentUpdateManyWithWhereNestedInput {
   data: CommentUpdateManyDataInput!
 }
 
-input CommentUpdateOneRequiredWithoutVoteInput {
-  create: CommentCreateWithoutVoteInput
-  update: CommentUpdateWithoutVoteDataInput
-  upsert: CommentUpsertWithoutVoteInput
+input CommentUpdateOneRequiredWithoutVotesInput {
+  create: CommentCreateWithoutVotesInput
+  update: CommentUpdateWithoutVotesDataInput
+  upsert: CommentUpsertWithoutVotesInput
   connect: CommentWhereUniqueInput
 }
 
@@ -561,7 +561,7 @@ input CommentUpdateWithoutBookDataInput {
   comment: String
   bookeval: Int
   user: UserUpdateOneRequiredWithoutCommentsInput
-  vote: VoteUpdateManyWithoutCommentInput
+  votes: VoteUpdateManyWithoutCommentInput
 }
 
 input CommentUpdateWithoutUserDataInput {
@@ -569,10 +569,10 @@ input CommentUpdateWithoutUserDataInput {
   comment: String
   bookeval: Int
   book: BookUpdateOneRequiredWithoutCommentsInput
-  vote: VoteUpdateManyWithoutCommentInput
+  votes: VoteUpdateManyWithoutCommentInput
 }
 
-input CommentUpdateWithoutVoteDataInput {
+input CommentUpdateWithoutVotesDataInput {
   title: String
   comment: String
   bookeval: Int
@@ -590,9 +590,9 @@ input CommentUpdateWithWhereUniqueWithoutUserInput {
   data: CommentUpdateWithoutUserDataInput!
 }
 
-input CommentUpsertWithoutVoteInput {
-  update: CommentUpdateWithoutVoteDataInput!
-  create: CommentCreateWithoutVoteInput!
+input CommentUpsertWithoutVotesInput {
+  update: CommentUpdateWithoutVotesDataInput!
+  create: CommentCreateWithoutVotesInput!
 }
 
 input CommentUpsertWithWhereUniqueWithoutBookInput {
@@ -660,9 +660,9 @@ input CommentWhereInput {
   bookeval_gte: Int
   book: BookWhereInput
   user: UserWhereInput
-  vote_every: VoteWhereInput
-  vote_some: VoteWhereInput
-  vote_none: VoteWhereInput
+  votes_every: VoteWhereInput
+  votes_some: VoteWhereInput
+  votes_none: VoteWhereInput
   AND: [CommentWhereInput!]
   OR: [CommentWhereInput!]
   NOT: [CommentWhereInput!]
@@ -1267,7 +1267,7 @@ type VoteConnection {
 
 input VoteCreateInput {
   id: ID
-  comment: CommentCreateOneWithoutVoteInput!
+  comment: CommentCreateOneWithoutVotesInput!
   user: UserCreateOneInput!
   usefull: Boolean
 }
@@ -1341,7 +1341,7 @@ input VoteSubscriptionWhereInput {
 }
 
 input VoteUpdateInput {
-  comment: CommentUpdateOneRequiredWithoutVoteInput
+  comment: CommentUpdateOneRequiredWithoutVotesInput
   user: UserUpdateOneRequiredInput
   usefull: Boolean
 }
