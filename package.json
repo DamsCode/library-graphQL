@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/DamsCode/library-graphQL#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.8.1",
     "graphql-yoga": "^1.18.3",
